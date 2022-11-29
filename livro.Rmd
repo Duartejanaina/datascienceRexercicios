@@ -1,0 +1,191 @@
+---
+title: "R_DataScience_Exercicios1"
+author: "Janaina Duarte"
+date: "29/11/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Resolução de atividades R para Data Sciece Hadley Wickham
+
+Carros com motores maiores usam mais combustível?
+Com relação entre tamanho de motor e eficácia de combustível se parece?
+é positivo ou negativo?
+```{r}
+library(tidyverse)
+```
+
+
+```{r}
+
+ggplot(data = mpg) +
+  geom_point(mapping=aes(x=displ, y=hwy))+
+  labs(x="tamanho_motor", y="eficiencia_combustivel")
+```
+
+relacao negatica entre o tamanho do motor e a eficiencia do combustivel
+carros com motores grandesusam mais combustível
+um grupo de pontos ficam fora da tendência linear, por quê?
+R: Podem ser outliers, veículos que saem do padrão.
+Mas será que esses carros sãp híbridos?
+Verificar o class de cada dado.
+
+```{r}
+ggplot(data = mpg) +
+  geom_point(mapping=aes(x=displ, y=hwy, color = class))+
+  labs(x="tamanho_motor", y="eficiencia_combustivel")
+```
+
+Os carros são da categoria subcompactos, outra forma:
+
+```{r}
+ggplot(data = mpg) +
+  geom_point(mapping=aes(x=displ, y=hwy, color = class))+
+  labs(x="tamanho_motor", y="eficiencia_combustivel")
+
+ggplot(data = mpg) +
+  geom_point(mapping=aes(x=displ, y=hwy, alpha = class))+
+  labs(x="tamanho_motor", y="eficiencia_combustivel")
+
+ggplot(data = mpg) +
+  geom_point(mapping=aes(x=displ, y=hwy, shape = class))+
+  labs(x="tamanho_motor", y="eficiencia_combustivel")
+```
+ggplot só usa seis formas de uma vez
+
+```{r}
+ggplot(data = mpg) +
+  geom_point(mapping=aes(x=displ, y=hwy), color = "blue")+
+  labs(x="tamanho_motor", y="eficiencia_combustivel")
+```
+
+os pontos não estão pretos porque o color indica que deveria ser azul
+execute o ggplot(data=mpg)
+
+```{r}
+ggplot(data = mpg)
+```
+R: Gráfico em Branco
+
+Quantas linhas existem no mt cars? Quantas colunas?
+R: 32 linhas, 11 colunas
+O que a variável drv descreve? Leia a ajuda de ?mpg para descobrir
+
+?mpg
+
+
+drv the type of drive train, where f = front-wheel drive, r = rear wheel drive, 4 = 4wd
+tipo de tração e força
+
+faça um gráfico de dispersão de hwy e cyl
+
+r: cyl número de cilindradas, hwy = milhas por galão
+
+```{r}
+ggplot(data = mpg)+
+  geom_point(mapping = aes(x = cyl, y = hwy))+
+  labs(x = "número_cilindradas", y = "milhas por galão")
+```
+
+o que acontece se você fizer um gráfico de dispersão entre class versus drv?
+esse gráfico não é útil?
+
+ggplot(data=mpg)+
+  geom_point(x = class, y = drv)
+
+R Gráfico not found, há dois variáveis numéricas e booleanas.
+Quais variáveis são categóricas?
+
+?mpg
+model, trans, drv, fl, year e class
+
+Mapeie uma variável contínua para color, size e shape
+
+```{r}
+
+ggplot(data = mpg) +
+  geom_point(mapping = aes(x = model, y = hwy, size = year))
+
+
+ggplot(data = mpg) +
+  geom_point(mapping = aes(x = model, y = hwy, color = year))
+
+
+ggplot(data = mpg) +
+  geom_point(mapping = aes(x = model, y = hwy, shape = class))
+
+```
+
+O que acontece se você mapear as mesmas variáves e várias estéticas?
+```{r}
+ggplot(data = mpg) +
+  geom_point(mapping = aes(x = model, y = hwy, shape = model))
+
+```
+
+##Abre um campo com muitos valores como legenda
+
+#O que a estética stroke faz?
+```{r}
+ggplot(data = mpg) +
+  geom_point(mapping = aes(x = model, y = hwy, color = year, stroke = 2))
+
+```
+
+?geom_point
+Altera a espessura do contorno
+
+# O que acontece se você mapear uma estética diferente?
+```{r}
+ggplot(data = mpg) +
+  geom_point(mapping = aes(x = model, y = hwy, color = year < 2006, stroke = 2))
+```
+O output é booleano
+
+##FACETAS: possibilita um gráfico com várias variáveis
+
+```{r}
+ggplot (data = mpg)+
+  geom_point(mapping = aes (x = displ, y = hwy))+
+  facet_wrap(~class, nrow = 2)
+
+ggplot (data = mpg)+
+  geom_point(mapping = aes (x = displ, y = hwy))+
+  facet_grid(drv~cyl)
+
+
+```
+
+
+
+# o que acontece se você criar facetas em uma variável contínua?
+```
+
+ggplot (data = mpg)+
+  geom_point(mapping = aes (x = displ, y = hwy))+
+  facet_wrap(~hwy, nrow = 2)
+
+```
+
+
+# cria vários outputs lineares
+
+# O que siginificam células em branco em um gráfico facet_grid
+```{r}
+
+ggplot (data = mpg)+
+  geom_point(mapping = aes (x = displ, y = hwy))+
+  facet_grid(drv~cyl)
+```
+
+
+que não há relação
+
+#Vantagens das facetas
+##A visualização fica mais limpa e pode se avaliar tópico por tópico de maneira isolada
+##desvantagem é que uma visualização da situação em geral não fica clara.
+
+
